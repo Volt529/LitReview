@@ -1,0 +1,105 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Créer une critique - LITReview{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">Créer une critique</h2>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <!-- Section Livre/Article -->
+        <h3 style="margin-bottom: 15px; font-size: 18px;">Livre / Article</h3>
+        
+        <div class="form-group">
+            <label for="id_ticket_title">Titre</label>
+            {{ form.ticket_title }}
+            {% if form.ticket_title.errors %}
+                <ul class="errorlist">
+                {% for error in form.ticket_title.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_ticket_description">Description</label>
+            {{ form.ticket_description }}
+            {% if form.ticket_description.errors %}
+                <ul class="errorlist">
+                {% for error in form.ticket_description.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_ticket_image">Image</label>
+            {{ form.ticket_image }}
+            {% if form.ticket_image.errors %}
+                <ul class="errorlist">
+                {% for error in form.ticket_image.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
+        
+        <!-- Section Critique -->
+        <h3 style="margin-bottom: 15px; font-size: 18px;">Critique</h3>
+        
+        <div class="form-group">
+            <label for="id_review_headline">Titre</label>
+            {{ form.review_headline }}
+            {% if form.review_headline.errors %}
+                <ul class="errorlist">
+                {% for error in form.review_headline.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>Note</label>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                {% for i in "012345" %}
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <input type="radio" name="review_rating" value="{{ i }}" {% if form.review_rating.value == i %}checked{% endif %}>
+                    <span>{{ i }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            {% if form.review_rating.errors %}
+                <ul class="errorlist">
+                {% for error in form.review_rating.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_review_body">Commentaire</label>
+            {{ form.review_body }}
+            {% if form.review_body.errors %}
+                <ul class="errorlist">
+                {% for error in form.review_body.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-primary">Envoyer</button>
+            <a href="{% url 'home' %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Flux - LITReview{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+        <a href="{% url 'create_ticket' %}" class="btn btn-primary" style="flex: 1; text-align: center;">Demander une critique</a>
+        <a href="{% url 'create_ticket_review' %}" class="btn btn-primary" style="flex: 1; text-align: center;">Créer une critique</a>
+    </div>
+
+    {% if posts %}
+        {% for post in posts %}
+            <div class="card">
+                {% if post.post_type == 'ticket' %}
+                    <!-- Afficher un ticket -->
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">{{ post.user.username }} a demandé une critique</p>
+                            <p style="font-size: 12px; color: #999;">{{ post.time_created|date:"H:i, d M Y" }}</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-bottom: 10px; font-size: 18px;">{{ post.title }}</h3>
+                    <p style="color: #666; margin-bottom: 15px;">{{ post.description }}</p>
+                    {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 200px; border-radius: 4px; margin-bottom: 15px;">
+                    {% endif %}
+                    <a href="{% url 'create_review' post.id %}" class="btn btn-secondary">Créer une critique</a>
+                {% else %}
+                    <!-- Afficher une critique -->
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <div>
+                            <p style="font-size: 14px; color: #666; margin-bottom: 5px;">{{ post.user.username }} a publié une critique</p>
+                            <p style="font-size: 12px; color: #999;">{{ post.time_created|date:"H:i, d M Y" }}</p>
+                        </div>
+                    </div>
+                    <h3 style="margin-bottom: 10px; font-size: 18px;">{{ post.headline }} - {% for i in "12345" %}{% if forloop.counter <= post.rating %}★{% else %}☆{% endif %}{% endfor %}</h3>
+                    <p style="color: #666; margin-bottom: 15px;">{{ post.body }}</p>
+                    
+                    <!-- Ticket associé -->
+                    <div style="background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; margin-top: 15px;">
+                        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Ticket - {{ post.ticket.user.username }}</p>
+                        <h4 style="margin-bottom: 5px; font-size: 16px;">{{ post.ticket.title }}</h4>
+                        {% if post.ticket.image %}
+                        <img src="{{ post.ticket.image.url }}" alt="{{ post.ticket.title }}" style="max-width: 150px; border-radius: 4px; margin-top: 10px;">
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="card" style="text-align: center; padding: 40px;">
+            <p style="color: #666; margin-bottom: 20px;">Aucun post pour le moment. Soyez le premier à partager !</p>
+        </div>
+    {% endif %}
+
+{% else %}
+    <div class="card" style="text-align: center; padding: 50px 20px;">
+        <h1 style="margin-bottom: 20px;">Bienvenue sur LITReview ! 📚</h1>
+        <p style="margin-bottom: 30px; color: #666;">Partagez vos critiques de livres et demandez des avis à la communauté</p>
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="{% url 'login' %}" class="btn btn-primary">Se connecter</a>
+            <a href="{% url 'signup' %}" class="btn btn-secondary">S'inscrire</a>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

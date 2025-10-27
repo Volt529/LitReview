@@ -1,0 +1,27 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Supprimer le ticket - LITReview{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px; color: #dc3545;">Supprimer ce ticket ?</h2>
+    
+    <div style="background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 10px; font-size: 18px;">{{ ticket.title }}</h3>
+        <p style="color: #666;">{{ ticket.description }}</p>
+        {% if ticket.image %}
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" style="max-width: 200px; border-radius: 4px; margin-top: 10px;">
+        {% endif %}
+    </div>
+    
+    <p style="margin-bottom: 20px; color: #dc3545; font-weight: bold;">⚠️ Cette action est irréversible !</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-danger">Confirmer la suppression</button>
+            <a href="{% url 'user_posts' %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

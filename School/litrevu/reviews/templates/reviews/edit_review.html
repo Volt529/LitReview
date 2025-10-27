@@ -1,0 +1,76 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Modifier la critique - LITReview{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 style="margin-bottom: 20px;">Modifier votre critique</h2>
+    <p style="margin-bottom: 20px; color: #666;">Vous êtes en train de modifier votre réponse à</p>
+    
+    <!-- Afficher le ticket -->
+    <div style="background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; margin-bottom: 30px;">
+        <p style="font-size: 13px; color: #666; margin-bottom: 10px;">{{ ticket.user.username }} a demandé une critique</p>
+        <h4 style="margin-bottom: 10px; font-size: 16px;">{{ ticket.title }}</h4>
+        <p style="color: #666; margin-bottom: 10px;">{{ ticket.description }}</p>
+        {% if ticket.image %}
+        <img src="{{ ticket.image.url }}" alt="{{ ticket.title }}" style="max-width: 200px; border-radius: 4px;">
+        {% endif %}
+        <p style="font-size: 12px; color: #999; margin-top: 10px;">{{ ticket.time_created|date:"H:i, d M Y" }}</p>
+    </div>
+    
+    <!-- Formulaire de critique -->
+    <form method="post">
+        {% csrf_token %}
+        
+        <h3 style="margin-bottom: 15px; font-size: 18px;">Critique</h3>
+        
+        <div class="form-group">
+            <label>{{ form.headline.label }}</label>
+            {{ form.headline }}
+            {% if form.headline.errors %}
+                <ul class="errorlist">
+                {% for error in form.headline.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.rating.label }}</label>
+            <div style="display: flex; gap: 20px; align-items: center;">
+                {% for value, text in form.rating.field.widget.choices %}
+                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <input type="radio" name="rating" value="{{ value }}" {% if form.rating.value == value|stringformat:"s" %}checked{% endif %}>
+                    <span>{{ text }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            {% if form.rating.errors %}
+                <ul class="errorlist">
+                {% for error in form.rating.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <label>{{ form.body.label }}</label>
+            {{ form.body }}
+            {% if form.body.errors %}
+                <ul class="errorlist">
+                {% for error in form.body.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+        
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{% url 'user_posts' %}" class="btn btn-secondary">Annuler</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

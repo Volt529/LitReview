@@ -1,0 +1,52 @@
+{% extends 'reviews/base.html' %}
+
+{% block title %}Abonnements - LITReview{% endblock %}
+
+{% block content %}
+<h2 style="margin-bottom: 30px;">Abonnements</h2>
+
+<!-- Section: Suivre un utilisateur -->
+<div class="card">
+    <h3 style="margin-bottom: 20px; font-size: 18px;">Suivre d'autres utilisateurs</h3>
+    <form method="post" action="{% url 'follow_user' %}" style="display: flex; gap: 10px;">
+        {% csrf_token %}
+        <input 
+            type="text" 
+            name="username" 
+            placeholder="Nom d'utilisateur" 
+            style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"
+            required
+        >
+        <button type="submit" class="btn btn-primary">Envoyer</button>
+    </form>
+</div>
+
+<!-- Section: Abonnements (ceux que je suis) -->
+<div class="card">
+    <h3 style="margin-bottom: 20px; font-size: 18px;">Abonnements</h3>
+    {% if following %}
+        {% for follow in following %}
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+            <span style="font-weight: 500;">{{ follow.followed_user.username }}</span>
+            <a href="{% url 'unfollow_user' follow.followed_user.id %}" class="btn btn-danger" style="font-size: 12px; padding: 5px 15px;">Désabonner</a>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color: #666; text-align: center; padding: 20px;">Vous ne suivez personne pour le moment.</p>
+    {% endif %}
+</div>
+
+<!-- Section: Abonnés (ceux qui me suivent) -->
+<div class="card">
+    <h3 style="margin-bottom: 20px; font-size: 18px;">Abonnés</h3>
+    {% if followers %}
+        {% for follower in followers %}
+        <div style="padding: 10px 0; border-bottom: 1px solid #f0f0f0;">
+            <span style="font-weight: 500;">{{ follower.user.username }}</span>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p style="color: #666; text-align: center; padding: 20px;">Personne ne vous suit pour le moment.</p>
+    {% endif %}
+</div>
+{% endblock %}
