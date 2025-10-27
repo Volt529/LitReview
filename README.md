@@ -95,9 +95,6 @@ Lancer le serveur
 
 bashpython manage.py runserver
 
-Accéder à l'application
-
-Ouvrez votre navigateur et allez sur http://127.0.0.1:8000/
 📁 Structure du projet
 litrevu/
 ├── authentication/          # Application d'authentification
