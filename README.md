@@ -61,7 +61,6 @@ pip
 
 Cloner le repository
 
-bashgit clone https://github.com/votre-username/litreview.git
 cd litreview
 
 Créer un environnement virtuel
